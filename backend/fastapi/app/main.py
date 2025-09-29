@@ -7,6 +7,7 @@ from .utils import price_band
 from fastapi import UploadFile, File
 from .train import fit_from_csv
 
+
 app = FastAPI(title='House Price ML Service')
 
 @app.post("/retrain")
