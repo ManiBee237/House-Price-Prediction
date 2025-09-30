@@ -6,6 +6,7 @@ from .model import MODEL
 from .utils import price_band
 from fastapi import UploadFile, File
 from .train import fit_from_csv
+import pandas as pd
 
 
 app = FastAPI(title='House Price ML Service')
@@ -34,10 +35,19 @@ def root():
 
 @app.post('/predict', response_model=PredictOut)
 def predict(p: PredictIn):
-    price = MODEL.predict(p.model_dump())
-    # If you trained with train.py, you can store R² somewhere persistent; for now use a nominal value
-    r2_meta = 0.82
-    return { 'predicted_price': price, 'currency': 'USD', 'r2_meta': r2_meta }
+    try:
+        # Pass dict (not DataFrame) to PriceModel
+        features = p.model_dump()
+        price = MODEL.predict(features)
+
+        r2_meta = 0.82
+        return { 'predicted_price': float(price), 'currency': 'USD', 'r2_meta': r2_meta }
+
+    except Exception as e:
+        print("Prediction error:", e)
+        from fastapi import HTTPException
+        raise HTTPException(status_code=400, detail=str(e))
+
 
 @app.get('/aggregates')
 def aggregates():

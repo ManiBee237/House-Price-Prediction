@@ -1,7 +1,13 @@
 fastapi==0.115.0
-uvicorn[standard]==0.30.0
-scikit-learn==1.4.2
-pandas==2.2.2
-numpy==1.26.4
+uvicorn[standard]==0.30.6
+pydantic==2.9.2
+python-multipart==0.0.9
+
+# ML & Data dependencies
+scikit-learn==1.5.2
 joblib==1.4.2
-python-dotenv==1.0.1
+numpy==2.1.1
+pandas==2.2.3
+
+# Optional (if you want CORS for frontend-backend connection)
+starlette==0.37.2
